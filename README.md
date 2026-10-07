@@ -410,7 +410,7 @@ Environment-specific configuration should be stored outside source control.
 
 # Demo Video
 
-Demo video:
+Demo video: https://drive.google.com/file/d/1e5f6Wbs9CUnIMj58-s8x43SpLnyb10BG/view?usp=sharing
 
 `TO BE ADDED`
 
