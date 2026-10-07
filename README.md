@@ -137,6 +137,7 @@ Multiple modified versions of the baseline dataset were created to test how the 
 | Renamed column | `Price Per Unit` → `Unit Price` | Yes, after schema validation | Not independently verified | High | [Details](observations/schema-drift-renamed-column.md) |
 | Added column | Added `Currency` | Initially no; yes after schema validation | Yes, after exact-schema remediation | High | [Details](observations/schema-drift-added-column.md) |
 | Quantity type drift | Replaced 100 quantities with `INVALID_QUANTITY` | No; invalid values became missing | Not required | Medium | [Details](observations/type-drift-quantity.md) |
+| Combined schema drift | Dropped `Category`, renamed `Price Per Unit`, added `Currency`, and injected 100 invalid `Quantity` values | Yes; stopped at `schema_validated` | Yes; chatbot fix was independently verified, but compile side effects required recovery | High | [Details](observations/schema-drift-combined.md) |
 | Monetary semantic drift | Multiplied monetary values by 100 | No; pipeline completed | No automatic fix; chatbot identified missing scale validation | Critical | [Details](observations/semantic-drift-currency-units.md) |
 | Ambiguous MM/DD dates | Introduced 500 ambiguous dates | No; dates retained intended meaning | Not required | Medium | [Details](observations/semantic-drift-ambiguous-dates.md) |
 | Day-first DD/MM dates | Reinterpreted 500 ambiguous dates | No; 500 dates changed meaning | No verified fix; explicit date format recommended | Critical | [Details](observations/semantic-drift-ambiguous-dates.md) |
