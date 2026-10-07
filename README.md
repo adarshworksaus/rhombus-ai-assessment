@@ -210,15 +210,18 @@ The tests connect to an authenticated Chrome session and verify the Rhombus work
 
 The tests verify:
 
-- the correct workflow is open
-- pipeline controls are available
-- Data Input is visible
-- Logs are visible
-- the pipeline can be started
-- the UI enters a running state
-- execution eventually returns to an idle state
+- the correct Rhombus workflow is open
+- the configured input-to-output transformation graph is present and connected
+- the AI-generated cleaning stages are present in the workflow
+- AI Builder contains pipeline-specific context, including the configured GCS output
+- the workflow has an active daily schedule
+- the schedule configuration is loaded and enabled
+- the pipeline can be started from the UI
+- the UI enters a real running state and returns to idle after execution completes
 
 The execution test waits for actual UI state changes rather than using fixed sleeps.
+
+The workflow uses Amazon S3 as its source and Google Cloud Storage as its destination, as documented in the Pipeline Overview. Rhombus does not expose the underlying S3/GCS connection names as stable visible text on the workflow canvas or Workspace, so the UI suite does not make a brittle text-based assertion for those connection labels. Instead, it verifies the configured input-to-output graph, AI Builder pipeline context, schedule state, and real execution behaviour.
 
 ## Running UI Tests
 
