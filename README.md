@@ -248,7 +248,7 @@ npx playwright test
 Current result:
 
 ```text
-2 passed
+4 passed
 ```
 
 Authentication is intentionally not stored in the repository.
