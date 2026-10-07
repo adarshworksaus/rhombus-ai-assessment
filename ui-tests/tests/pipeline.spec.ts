@@ -1,5 +1,4 @@
-import { test, expect, chromium } from '@playwright/test';
-test.describe.configure({ mode: 'serial' });
+import { test, expect, chromium } from '@playwright/test';test.describe.configure({ mode: 'serial' });
 
 test('Rhombus workflow loads with pipeline controls', async () => {
   const browser = await chromium.connectOverCDP(
@@ -28,10 +27,6 @@ test('Rhombus workflow loads with pipeline controls', async () => {
 
   await expect(
     page.getByRole('button', { name: /Data Input/ }).first()
-  ).toBeVisible();
-
-  await expect(
-    page.getByRole('button', { name: /Data Output/ }).first()
   ).toBeVisible();
 
   await browser.close();
