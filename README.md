@@ -131,15 +131,15 @@ Missing values were intentionally retained in appropriate fields so the pipeline
 
 Multiple modified versions of the baseline dataset were created to test how the pipeline behaves when the upstream data contract changes.
 
-| Test | Change Introduced | Result |
-|---|---|---|
-| Dropped column | Removed `Category` | Schema validation rejected the input |
-| Renamed column | `Price Per Unit` → `Unit Price` | Schema validation rejected the input |
-| Type/value drift | Injected `INVALID_QUANTITY` into 100 Quantity values | Pipeline converted invalid values to missing values |
-| Added column | Added `Currency` | Initially propagated silently; after remediation the schema validator rejected it |
-| Monetary semantic drift | Multiplied monetary values by 100 | Pipeline succeeded without detecting the unit/scale change |
-| Ambiguous dates | Introduced ambiguous MM/DD dates | Pipeline preserved these values |
-| Day-first date drift | Supplied the same ambiguous dates as DD/MM | Pipeline silently changed the meaning of all 500 tested dates |
+| Drift case | Change introduced | Pipeline stopped? | Chatbot fix worked? | Severity | Observation |
+|---|---|---|---|---|---|
+| Dropped column | Removed `Category` | Initially no; yes after schema validation | Yes, after additional manual corrections | High | [Details](observations/schema-drift-drop-column.md) |
+| Renamed column | `Price Per Unit` → `Unit Price` | Yes, after schema validation | Not independently verified | High | [Details](observations/schema-drift-renamed-column.md) |
+| Added column | Added `Currency` | Initially no; yes after schema validation | Yes, after exact-schema remediation | High | [Details](observations/schema-drift-added-column.md) |
+| Quantity type drift | Replaced 100 quantities with `INVALID_QUANTITY` | No; invalid values became missing | Not required | Medium | [Details](observations/type-drift-quantity.md) |
+| Monetary semantic drift | Multiplied monetary values by 100 | No; pipeline completed | No automatic fix; chatbot identified missing scale validation | Critical | [Details](observations/semantic-drift-currency-units.md) |
+| Ambiguous MM/DD dates | Introduced 500 ambiguous dates | No; dates retained intended meaning | Not required | Medium | [Details](observations/semantic-drift-ambiguous-dates.md) |
+| Day-first DD/MM dates | Reinterpreted 500 ambiguous dates | No; 500 dates changed meaning | No verified fix; explicit date format recommended | Critical | [Details](observations/semantic-drift-ambiguous-dates.md) |
 
 Detailed observations are available in the `/observations` directory.
 
@@ -210,7 +210,6 @@ The tests verify:
 - the correct workflow is open
 - pipeline controls are available
 - Data Input is visible
-- Data Output is visible
 - Logs are visible
 - the pipeline can be started
 - the UI enters a running state
