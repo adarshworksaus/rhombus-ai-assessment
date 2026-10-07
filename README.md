@@ -156,6 +156,8 @@ data-validation/validate_pipeline.py
 
 It compares the processed GCS output against the source/reference data.
 
+Recorded results for the baseline and drift scenarios are available in [data-validation/results.md](data-validation/results.md).
+
 The validator checks:
 
 - exact schema
