@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rhombus AI ETL QA Dashboard</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f7fb;
+      color: #172033;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 48px 24px;
+    }
+
+    header {
+      margin-bottom: 32px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 34px;
+    }
+
+    .subtitle {
+      color: #667085;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .card,
+    .panel {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.04);
+    }
+
+    .metric {
+      font-size: 28px;
+      font-weight: 700;
+      margin-top: 8px;
+    }
+
+    .label {
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .pass {
+      color: #14804a;
+    }
+
+    .detected {
+      color: #b54708;
+    }
+
+    .section-title {
+      font-size: 21px;
+      margin: 36px 0 16px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 14px;
+      border-bottom: 1px solid #eaecf0;
+      font-size: 14px;
+    }
+
+    th {
+      color: #475467;
+      background: #f9fafb;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .badge-pass {
+      background: #ecfdf3;
+      color: #027a48;
+    }
+
+    .badge-detected {
+      background: #fffaeb;
+      color: #b54708;
+    }
+
+    .badge-cleaned {
+      background: #eff8ff;
+      color: #175cd3;
+    }
+
+    .findings {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .finding-number {
+      font-size: 13px;
+      font-weight: 700;
+      color: #667085;
+    }
+
+    .finding-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 8px 0;
+    }
+
+    .finding-text {
+      color: #667085;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    footer {
+      margin-top: 40px;
+      color: #98a2b3;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    @media (max-width: 800px) {
+      .summary,
+      .findings {
+        grid-template-columns: 1fr;
+      }
+
+      .panel {
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <header>
+      <h1>Rhombus AI ETL QA Dashboard</h1>
+      <div class="subtitle">
+        Assessment results for the S3 → Rhombus AI → GCS retail-data pipeline.
+        Results cover baseline execution, schema drift, type drift,
+        semantic drift, determinism, UI automation and backend API testing.
+      </div>
+    </header>
+
+    <div class="summary">
+
+      <div class="card">
+        <div class="label">Baseline Pipeline</div>
+        <div class="metric pass">PASS</div>
+      </div>
+
+      <div class="card">
+        <div class="label">UI Automation</div>
+        <div class="metric pass">2 / 2</div>
+      </div>
+
+      <div class="card">
+        <div class="label">API Automation</div>
+        <div class="metric pass">2 / 2</div>
+      </div>
+
+      <div class="card">
+        <div class="label">Determinism</div>
+        <div class="metric pass">PASS</div>
+      </div>
+
+    </div>
+
+    <h2 class="section-title">Drift Test Results</h2>
+
+    <div class="panel">
+      <table>
+        <thead>
+          <tr>
+            <th>Test</th>
+            <th>Drift Type</th>
+            <th>Observed Result</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr>
+            <td>Dropped Category column</td>
+            <td>Schema drift</td>
+            <td>Rejected by explicit schema validation</td>
+            <td><span class="badge badge-detected">DETECTED</span></td>
+          </tr>
+
+          <tr>
+            <td>Price Per Unit → Unit Price</td>
+            <td>Schema drift</td>
+            <td>Missing required column detected</td>
+            <td><span class="badge badge-detected">DETECTED</span></td>
+          </tr>
+
+          <tr>
+            <td>Added Currency column</td>
+            <td>Schema drift</td>
+            <td>Unexpected column detected</td>
+            <td><span class="badge badge-detected">DETECTED</span></td>
+          </tr>
+
+          <tr>
+            <td>Invalid Quantity values</td>
+            <td>Type/value drift</td>
+            <td>100 injected invalid values converted to missing values</td>
+            <td><span class="badge badge-cleaned">CLEANED</span></td>
+          </tr>
+
+          <tr>
+            <td>Monetary values ×100</td>
+            <td>Semantic drift</td>
+            <td>23,937 scale changes detected by independent validator</td>
+            <td><span class="badge badge-detected">DETECTED</span></td>
+          </tr>
+
+          <tr>
+            <td>Ambiguous DD/MM dates</td>
+            <td>Semantic drift</td>
+            <td>500 / 500 controlled ambiguous dates changed meaning</td>
+            <td><span class="badge badge-detected">DETECTED</span></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="section-title">Automation Coverage</h2>
+
+    <div class="panel">
+      <table>
+        <thead>
+          <tr>
+            <th>Layer</th>
+            <th>Coverage</th>
+            <th>Result</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr>
+            <td>Data Validation</td>
+            <td>
+              Schema, row counts, duplicates, missing IDs, whitespace,
+              numeric fields, dates, booleans, semantic drift and determinism
+            </td>
+            <td><span class="badge badge-pass">PASS</span></td>
+          </tr>
+
+          <tr>
+            <td>Playwright UI</td>
+            <td>
+              Workflow availability and clean pipeline execution using
+              observable UI state
+            </td>
+            <td><span class="badge badge-pass">2 / 2 PASS</span></td>
+          </tr>
+
+          <tr>
+            <td>Backend API</td>
+            <td>
+              Workflow node retrieval plus invalid workflow negative test
+            </td>
+            <td><span class="badge badge-pass">2 / 2 PASS</span></td>
+          </tr>
+
+          <tr>
+            <td>Determinism</td>
+            <td>
+              Canonical comparison of repeated clean pipeline outputs
+            </td>
+            <td><span class="badge badge-pass">PASS</span></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="section-title">Top Findings</h2>
+
+    <div class="findings">
+
+      <div class="card">
+        <div class="finding-number">FINDING 01</div>
+        <div class="finding-title">Schema contracts matter</div>
+        <div class="finding-text">
+          Missing, renamed and unexpected columns were reliably stopped only
+          after explicit exact-schema validation was introduced.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="finding-number">FINDING 02</div>
+        <div class="finding-title">Valid schema ≠ valid data</div>
+        <div class="finding-text">
+          Monetary values scaled by 100 remained structurally valid.
+          Independent semantic validation detected 23,937 affected values.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="finding-number">FINDING 03</div>
+        <div class="finding-title">Dates can fail silently</div>
+        <div class="finding-text">
+          Ambiguous day-first dates produced valid-looking output while
+          changing the meaning of all 500 controlled ambiguous dates.
+        </div>
+      </div>
+
+    </div>
+
+    <h2 class="section-title">Product Observation</h2>
+
+    <div class="panel">
+      <div class="finding-title">Execution status consistency</div>
+      <div class="finding-text">
+        During schema-drift testing, the interface could display a specific
+        pipeline failure alongside a generic successful-completion message.
+        Clearer propagation of terminal pipeline state would improve
+        operational confidence and troubleshooting.
+      </div>
+    </div>
+
+    <footer>
+      Rhombus AI QA & Automation Assessment
+    </footer>
+
+  </div>
+</body>
+</html>

@@ -408,6 +408,16 @@ Environment-specific configuration should be stored outside source control.
 
 ---
 
+
+## QA Results Dashboard
+
+A lightweight dashboard summarising the baseline pipeline, drift experiments,
+automation coverage and key QA findings is included in:
+
+`dashboard/index.html`
+
+Open it locally in a browser to view the assessment results dashboard.
+
 # Demo Video
 
 Demo video: https://drive.google.com/file/d/1e5f6Wbs9CUnIMj58-s8x43SpLnyb10BG/view?usp=sharing
